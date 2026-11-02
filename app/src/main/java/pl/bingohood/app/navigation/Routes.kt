@@ -6,8 +6,7 @@ import kotlinx.serialization.Serializable
 object BoardRoute : Route
 
 @Serializable
-object GuideRoute : Route {
-}
+object GuideRoute : Route
 
 @Serializable
 object StatsRoute : Route

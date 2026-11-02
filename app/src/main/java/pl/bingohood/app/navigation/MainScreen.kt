@@ -43,7 +43,7 @@ fun MainScreen() {
         }
 
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = BoardRoute, modifier = Modifier.padding(innerPadding)) {
+        NavHost(navController = navController, startDestination = BoardRoute, Modifier.padding(innerPadding)) {
 
             composable<BoardRoute> {
                 BoardScreen(
@@ -54,7 +54,6 @@ fun MainScreen() {
             }
 
             composable<StatsRoute> { StatsScreen() }
-
             composable<AchievementsRoute> { AchievementsScreen() }
 
             composable<GuideRoute> {
