@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pl.bingohood.app.achievements.AchievementsScreen
 import pl.bingohood.app.board.BoardScreen
+import pl.bingohood.app.guide.GuideScreen
 import pl.bingohood.app.stats.StatsScreen
 
 @Composable
@@ -42,10 +43,27 @@ fun MainScreen() {
         }
 
     ) { innerPadding ->
-        NavHost(navController, BoardRoute, Modifier.padding(innerPadding)) {
-            composable<BoardRoute> { BoardScreen() }
+        NavHost(navController = navController, startDestination = BoardRoute, modifier = Modifier.padding(innerPadding)) {
+
+            composable<BoardRoute> {
+                BoardScreen(
+                    onNavigateToGuide = {
+                        navController.navigate(GuideRoute)
+                    }
+                )
+            }
+
             composable<StatsRoute> { StatsScreen() }
+
             composable<AchievementsRoute> { AchievementsScreen() }
+
+            composable<GuideRoute> {
+                GuideScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     }
 }
