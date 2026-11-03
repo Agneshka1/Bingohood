@@ -33,16 +33,14 @@ fun BoardScreen(onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
         ) {
             FilledTonalButton(
                 onClick = onBoardDiscover,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Odkryj planszę")
             }
 
             Button(
                 onClick = onNavigateToGuide,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Zasady bingo")
             }
