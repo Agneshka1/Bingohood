@@ -49,6 +49,9 @@ fun MainScreen() {
                 BoardScreen(
                     onNavigateToGuide = {
                         navController.navigate(GuideRoute)
+                    },
+                    onBoardDiscover = {
+                        // TODO
                     }
                 )
             }

@@ -22,7 +22,6 @@ fun GuideScreen(onNavigateBack: () -> Unit) {
         ) {
             Text(
                 text = "Zasady bingo",
-                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = onNavigateBack) {
