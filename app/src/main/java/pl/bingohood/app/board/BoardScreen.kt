@@ -14,27 +14,21 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BoardScreen(onNavigateToGuide: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-            content = { Text("Ekran planszy", fontSize = 20.sp) }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = "Ekran planszy",
+            fontSize = 20.sp,
+            modifier = Modifier.align(Alignment.Center)
         )
-        Box(
+
+        Button(
+            onClick = onNavigateToGuide,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            contentAlignment = Alignment.BottomCenter
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
-            Button(
-                onClick = onNavigateToGuide,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Zasady bingo")
-            }
+            Text("Zasady bingo")
         }
     }
 }
