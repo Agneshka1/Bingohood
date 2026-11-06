@@ -17,11 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Kolory wyciągnięte ze stylu makiety
-val BackgroundColor = Color(0xFFF4F6F9) // Delikatne jasnoszare tło
-val PrimaryNavy = Color(0xFF0F2537)     // Ciemny granat
-val AccentOrange = Color(0xFFF2994A)    // Pomarańczowy akcent
-val SecondaryText = Color(0xFF6C757D)   // Szary kolor pomocniczego tekstu
+// Kolory wyciągnięte do motywu
+val BackgroundColor = MaterialTheme.colorScheme.background
+val PrimaryNavy = MaterialTheme.colorScheme.primary
+val AccentOrange = MaterialTheme.colorScheme.secondary
+val SecondaryText = MaterialTheme.colorScheme.onSurfaceVariant
 
 @Composable
 fun StatsScreen() {
