@@ -14,9 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pl.bingohood.app.place.Place
 
 @Composable
-fun BoardScreen(onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
+fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Ekran planszy",
@@ -35,7 +36,7 @@ fun BoardScreen(onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
                 onClick = onBoardDiscover,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Odkryj planszę")
+                if (boardPhase == BoardPhase.DISCOVERED) Text("Timer") else Text("Odkryj planszę")
             }
 
             Button(
