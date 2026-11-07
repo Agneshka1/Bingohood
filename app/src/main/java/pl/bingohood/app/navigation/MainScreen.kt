@@ -40,7 +40,13 @@ fun MainScreen() {
                         label = { Text(item.label) },
                         icon = { Icon(painterResource(item.icon), contentDescription = null) },
                         onClick = {
-                            navController.navigate(item.route)
+                            navController.navigate(item.route)  {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     )
                 }
