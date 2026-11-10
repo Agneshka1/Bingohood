@@ -35,29 +35,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pl.bingohood.app.R
-
-private val NavyBlue = Color(0xFF0B1E36)
-private val OrangeAccent = Color(0xFFF2994A)
-private val GrayCell = Color(0xFFECEFF1)
-private val DividerColor = Color(0xFFE2E8F0)
-private val SubtitleColor = Color(0xFF64748B)
-private val FooterTextColor = Color(0xFF8C7E72)
+import pl.bingohood.app.ui.theme.BingohoodTheme
+import pl.bingohood.app.ui.theme.DividerColor
+import pl.bingohood.app.ui.theme.FooterTextColor
+import pl.bingohood.app.ui.theme.GrayCell
+import pl.bingohood.app.ui.theme.NavyBlue
+import pl.bingohood.app.ui.theme.OrangeAccent
+import pl.bingohood.app.ui.theme.SubtitleColor
 
 private val InstructionSteps = listOf(
     "Wybierz pole na planszy i udaj się do wskazanego miejsca.",
     "Dotrzyj do wyznaczonej lokalizacji w Gdańsku.",
     "Oznacz miejsce jako zaliczone",
-    "Zaliczenie trzech pól w jednej linii daje bingo."
+    "Zaliczenie trzech pól w jednej linii daje bingo.",
 )
 
 @Composable
 fun GuideScreen(
     modifier: Modifier = Modifier,
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.background,
     ) {
         Column(
             modifier = Modifier
@@ -345,7 +345,7 @@ private fun FooterSection(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun GuideScreenPreview() {
-    MaterialTheme {
+    BingohoodTheme {
         GuideScreen()
     }
 }
