@@ -1,5 +1,6 @@
 package pl.bingohood.app.stats
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,85 +13,134 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import pl.bingohood.app.ui.theme.BingohoodTheme
 
 @Composable
-fun StatsScreen() {
-    val backgroundColor = MaterialTheme.colorScheme.background
-    val primaryNavy = MaterialTheme.colorScheme.primary
-    val accentOrange = MaterialTheme.colorScheme.secondary
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
+fun StatsScreen(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.Start
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Nagłówek w stylu makiety
-            item {
-                Column(modifier = Modifier.padding(bottom = 8.dp)) {
-                    Text(
-                        text = "♦ Odkryj Gdańsk",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryNavy
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Twoje Statystyki",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryNavy
-                    )
-                }
-            }
+            HeaderSection()
 
-            // Kafelki ze statystykami z podświetlonymi numerkami
-            item {
-                StatCard(number = "1", title = "Odwiedzone miejsca", value = "12 / 25", badgeColor = primaryNavy)
-            }
-            item {
-                StatCard(number = "2", title = "Zdobyte plansze Bingo", value = "3", badgeColor = primaryNavy)
-            }
-            item {
-                StatCard(number = "3", title = "Najszybciej ukończone Bingo", value = "2 dni 4 godz.", badgeColor = primaryNavy)
-            }
-            item {
-                StatCard(number = "4", title = "Procent ukończenia Gdańska", value = "48%", badgeColor = accentOrange)
-            }
+            Text(
+                text = "Moje Statystyki",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            StatCard(
+                icon = Icons.Default.LocationOn,
+                title = "Odwiedzone miejsca",
+                value = "0",
+                subtitle = "Wszystkie zaliczone lokalizacje"
+            )
+
+            StatCard(
+                icon = Icons.Default.Star,
+                title = "Zdobyte Bingo",
+                value = "0",
+                subtitle = "Ukończone linie na planszach"
+            )
+
+            StatCard(
+                icon = Icons.Default.DateRange,
+                title = "Aktywne dni",
+                value = "0",
+                subtitle = "Dni z rzędu w grze"
+            )
+
+            Spacer(modifier = Modifier.weight(1f, fill = false))
+
+            MotivationalBanner()
         }
     }
 }
 
-// Komponent karty dopasowany wizualnie do zaokrągleń i stylu ze zdjęcia
 @Composable
-fun StatCard(number: String, title: String, value: String, badgeColor: Color) {
-    val primaryNavy = MaterialTheme.colorScheme.primary
-    val secondaryText = MaterialTheme.colorScheme.onSurfaceVariant
+private fun HeaderSection(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "Logo Bingohood",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(22.dp)
+            )
+        }
 
+        Column {
+            Text(
+                text = "Bingohood",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "Twoje postępy",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun StatCard(
+    icon: ImageVector,
+    title: String,
+    value: String,
+    subtitle: String,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -98,49 +148,91 @@ fun StatCard(number: String, title: String, value: String, badgeColor: Color) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Okrągła ikona z numerkiem w stylu listy z makiety
             Box(
                 modifier = Modifier
-                    .size(36.dp)
-                    .background(color = badgeColor, shape = CircleShape),
+                    .size(52.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+                        shape = CircleShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = number,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                Icon(
+                    imageVector = icon,
+                    contentDescription = title,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(26.dp)
                 )
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Tekst statystyki
             Column {
                 Text(
                     text = title,
-                    fontSize = 13.sp,
-                    color = secondaryText,
-                    fontWeight = FontWeight.Medium
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = value,
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Bold,
-                    color = primaryNavy
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
 
+@Composable
+private fun MotivationalBanner(
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
+        ),
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.secondary)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Whatshot,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = "Graj codziennie, aby utrzymać serię!",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun StatsScreenPreview() {
+private fun StatsScreenPreview() {
     BingohoodTheme {
         StatsScreen()
     }
