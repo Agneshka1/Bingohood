@@ -35,8 +35,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import pl.bingohood.app.ui.components.BingohoodHeader
 import pl.bingohood.app.ui.theme.BingohoodTheme
 
+// TODO: Na późniejszym etapie należy zaimplementować logikę zliczania statystyk w kodzie
 @Composable
 fun StatsScreen(
     modifier: Modifier = Modifier
@@ -52,7 +54,7 @@ fun StatsScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            HeaderSection()
+            BingohoodHeader(subtitle = "Twoje postępy")
 
             Text(
                 text = "Moje Statystyki",
@@ -85,48 +87,6 @@ fun StatsScreen(
             Spacer(modifier = Modifier.weight(1f, fill = false))
 
             MotivationalBanner()
-        }
-    }
-}
-
-@Composable
-private fun HeaderSection(
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Logo Bingohood",
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(22.dp)
-            )
-        }
-
-        Column {
-            Text(
-                text = "Bingohood",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "Twoje postępy",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }

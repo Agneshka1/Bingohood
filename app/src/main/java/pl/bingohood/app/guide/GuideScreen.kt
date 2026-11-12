@@ -20,7 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,12 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pl.bingohood.app.R
+import pl.bingohood.app.ui.components.BingohoodHeader
 import pl.bingohood.app.ui.theme.BingohoodTheme
 import pl.bingohood.app.ui.theme.DividerColor
 import pl.bingohood.app.ui.theme.FooterTextColor
@@ -82,23 +80,7 @@ private fun HeaderSection(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.guide),
-                contentDescription = null,
-                tint = OrangeAccent,
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                text = "Bingohood",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = NavyBlue
-            )
-        }
+        BingohoodHeader()
 
         Text(
             text = "Jak zdobyć bingo?",
@@ -106,7 +88,7 @@ private fun HeaderSection(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp
             ),
-            color = NavyBlue
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
