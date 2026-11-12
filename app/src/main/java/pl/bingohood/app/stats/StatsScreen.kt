@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import pl.bingohood.app.ui.components.BingohoodHeader
 import pl.bingohood.app.ui.theme.BingohoodTheme
 
@@ -51,17 +52,10 @@ fun StatsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            BingohoodHeader(subtitle = "Twoje postępy")
-
-            Text(
-                text = "Moje Statystyki",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            HeaderSection()
 
             StatCard(
                 icon = Icons.Default.LocationOn,
@@ -84,10 +78,29 @@ fun StatsScreen(
                 subtitle = "Dni z rzędu w grze"
             )
 
-            Spacer(modifier = Modifier.weight(1f, fill = false))
+            Spacer(modifier = Modifier.height(4.dp))
 
             MotivationalBanner()
         }
+    }
+}
+
+@Composable
+private fun HeaderSection(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        BingohoodHeader(subtitle = "Twoje postępy")
+
+        Text(
+            text = "Moje Statystyki",
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 28.sp
+            ),
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }
 

@@ -1,4 +1,3 @@
-
 package pl.bingohood.app.ui.components
 
 import androidx.compose.foundation.background
@@ -57,13 +56,11 @@ fun BingohoodHeader(
                 color = MaterialTheme.colorScheme.primary
             )
 
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Text(
+                text = subtitle ?: " ",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
