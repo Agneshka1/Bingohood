@@ -15,8 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pl.bingohood.app.ui.components.BingohoodButton
 import pl.bingohood.app.ui.components.BingohoodHeader
 import pl.bingohood.app.ui.theme.BingohoodTheme
 import pl.bingohood.app.ui.theme.DividerColor
@@ -68,7 +67,11 @@ fun GuideScreen(
             BingoPatternsCard()
             InstructionsCard()
             Spacer(modifier = Modifier.height(4.dp))
-            UnderstandButton(onClick = onNavigateBack)
+            BingohoodButton(
+                text = "Rozumiem",
+                onClick = onNavigateBack,
+                modifier = Modifier.fillMaxWidth()
+            )
             FooterSection()
         }
     }
@@ -264,30 +267,6 @@ private fun InstructionStepRow(
             color = NavyBlue,
             lineHeight = 20.sp,
             modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-@Composable
-private fun UnderstandButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = NavyBlue,
-            contentColor = Color.White
-        )
-    ) {
-        Text(
-            text = "Rozumiem",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
         )
     }
 }
