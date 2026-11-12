@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import pl.bingohood.app.ui.components.BingohoodHeader
 import pl.bingohood.app.ui.theme.BingohoodTheme
 
@@ -95,10 +94,8 @@ private fun HeaderSection(modifier: Modifier = Modifier) {
 
         Text(
             text = "Moje Statystyki",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            ),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
     }
