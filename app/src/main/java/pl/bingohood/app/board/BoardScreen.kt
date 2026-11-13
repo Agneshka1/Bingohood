@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pl.bingohood.app.place.Place
 
+var UNKNOWN_PLACE = "?"
+
 @Composable
 fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -42,7 +44,7 @@ fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, onNavigateToGuide: 
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     for (i in 1..3) {
-                        val placeName = places.getOrNull(index)?.name ?: "?"
+                        val placeName = places.getOrNull(index)?.name ?: UNKNOWN_PLACE
                         BoardTile(
                             text = placeName,
                             modifier = Modifier.weight(1f).aspectRatio(1f)
@@ -87,7 +89,7 @@ fun BoardTile(
         ) {
             Text(
                 text = text,
-                fontSize = if (text == "?") 20.sp else 15.sp,
+                fontSize = if (text == UNKNOWN_PLACE) 20.sp else 15.sp,
                 style = textStyle,
                 textAlign = TextAlign.Center,
                 maxLines = 3,
