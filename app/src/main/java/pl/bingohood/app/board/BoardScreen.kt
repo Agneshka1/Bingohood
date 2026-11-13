@@ -27,7 +27,7 @@ import pl.bingohood.app.place.Place
 var UNKNOWN_PLACE = "?"
 
 @Composable
-fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
+fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, timeLeftInSeconds: Int, onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -60,7 +60,7 @@ fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, onNavigateToGuide: 
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             ) {
-                if (boardPhase == BoardPhase.DISCOVERED) Text("Timer") else Text("Odkryj planszę")
+                if (boardPhase == BoardPhase.DISCOVERED) Text(timeLeftInSeconds.toString()) else Text("Odkryj planszę")
             }
 
             Button(

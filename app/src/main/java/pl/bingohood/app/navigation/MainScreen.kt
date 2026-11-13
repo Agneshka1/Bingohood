@@ -61,8 +61,9 @@ fun MainScreen() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val boardPhase = uiState.boardPhase
                 val places = uiState.places
+                val secondsLeft = uiState.timeLeftInSeconds
 
-                BoardScreen(boardPhase, places,
+                BoardScreen(boardPhase, places, secondsLeft,
                     onNavigateToGuide = {
                         navController.navigate(GuideRoute)
                     },
