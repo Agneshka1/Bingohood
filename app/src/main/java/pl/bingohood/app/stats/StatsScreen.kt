@@ -17,11 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -31,12 +26,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import pl.bingohood.app.R
 import pl.bingohood.app.ui.components.BingohoodHeader
-import pl.bingohood.app.ui.theme.BingohoodTheme
 
 // TODO: Na późniejszym etapie należy zaimplementować logikę zliczania statystyk w kodzie
 @Composable
@@ -57,21 +51,21 @@ fun StatsScreen(
             HeaderSection()
 
             StatCard(
-                icon = Icons.Default.LocationOn,
+                iconRes = R.drawable.ic_location,
                 title = "Odwiedzone miejsca",
                 value = "0",
                 subtitle = "Wszystkie zaliczone lokalizacje"
             )
 
             StatCard(
-                icon = Icons.Default.Star,
+                iconRes = R.drawable.ic_star,
                 title = "Zdobyte Bingo",
                 value = "0",
                 subtitle = "Ukończone linie na planszach"
             )
 
             StatCard(
-                icon = Icons.Default.DateRange,
+                iconRes = R.drawable.ic_calendar,
                 title = "Aktywne dni",
                 value = "0",
                 subtitle = "Dni z rzędu w grze"
@@ -103,7 +97,7 @@ private fun HeaderSection(modifier: Modifier = Modifier) {
 
 @Composable
 private fun StatCard(
-    icon: ImageVector,
+    iconRes: Int,
     title: String,
     value: String,
     subtitle: String,
@@ -131,7 +125,7 @@ private fun StatCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = icon,
+                    painter = painterResource(id = iconRes),
                     contentDescription = title,
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(26.dp)
@@ -185,7 +179,7 @@ private fun MotivationalBanner(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Whatshot,
+                painter = painterResource(id = R.drawable.ic_fire),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(24.dp)
@@ -197,13 +191,5 @@ private fun MotivationalBanner(
                 color = MaterialTheme.colorScheme.primary
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun StatsScreenPreview() {
-    BingohoodTheme {
-        StatsScreen()
     }
 }

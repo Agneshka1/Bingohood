@@ -26,11 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.bingohood.app.ui.components.BingohoodButton
 import pl.bingohood.app.ui.components.BingohoodHeader
-import pl.bingohood.app.ui.theme.BingohoodTheme
 
 private val InstructionSteps = listOf(
     "Wybierz pole na planszy i udaj się do wskazanego miejsca.",
@@ -294,13 +292,5 @@ private fun FooterSection(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.tertiary
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GuideScreenPreview() {
-    BingohoodTheme {
-        GuideScreen()
     }
 }
