@@ -3,11 +3,12 @@ Bingohood is a mobile application for Android designed to encourage users to exp
 The application allows users to discover the city through a game in which they visit selected locations and mark completed tasks.
 
 # Features
-- Bingo board featuring selected locations in Gdańsk.
+- Bingo board featuring selected locations in Gdańsk
 - Displaying 9 random locations provided by web server each day
-- Marking visited places as completed.
-- Tracking progress on the bingo board.
+- Marking visited places as completed
+- Tracking progress on the bingo board
 - Achievements
+- Guide Screen
 
 ## Technologies:
 - Kotlin
