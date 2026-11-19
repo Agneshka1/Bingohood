@@ -15,12 +15,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,20 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import pl.bingohood.app.R
-import pl.bingohood.app.ui.theme.BingohoodTheme
-import pl.bingohood.app.ui.theme.DividerColor
-import pl.bingohood.app.ui.theme.FooterTextColor
-import pl.bingohood.app.ui.theme.GrayCell
-import pl.bingohood.app.ui.theme.NavyBlue
-import pl.bingohood.app.ui.theme.OrangeAccent
-import pl.bingohood.app.ui.theme.SubtitleColor
+import pl.bingohood.app.ui.components.BingohoodButton
+import pl.bingohood.app.ui.components.BingohoodHeader
 
 private val InstructionSteps = listOf(
     "Wybierz pole na planszy i udaj się do wskazanego miejsca.",
@@ -70,7 +57,11 @@ fun GuideScreen(
             BingoPatternsCard()
             InstructionsCard()
             Spacer(modifier = Modifier.height(4.dp))
-            UnderstandButton(onClick = onNavigateBack)
+            BingohoodButton(
+                text = "Rozumiem",
+                onClick = onNavigateBack,
+                modifier = Modifier.fillMaxWidth()
+            )
             FooterSection()
         }
     }
@@ -82,31 +73,13 @@ private fun HeaderSection(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.guide),
-                contentDescription = null,
-                tint = OrangeAccent,
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                text = "Bingohood",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = NavyBlue
-            )
-        }
+        BingohoodHeader(subtitle = "Zasady gry")
 
         Text(
             text = "Jak zdobyć bingo?",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            ),
-            color = NavyBlue
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -116,7 +89,7 @@ private fun BingoPatternsCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -133,12 +106,12 @@ private fun BingoPatternsCard(modifier: Modifier = Modifier) {
                     text = "Układy bingo",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = NavyBlue
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = "8 możliwych linii",
                     style = MaterialTheme.typography.bodySmall,
-                    color = SubtitleColor
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -182,7 +155,7 @@ private fun BingoPatternItem(
             text = title,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Medium,
-            color = NavyBlue
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -206,7 +179,10 @@ private fun BingoGrid3x3(
                         modifier = Modifier
                             .size(20.dp)
                             .clip(RoundedCornerShape(4.dp))
-                            .background(if (marked) OrangeAccent else GrayCell)
+                            .background(
+                                if (marked) MaterialTheme.colorScheme.secondary
+                                else MaterialTheme.colorScheme.surfaceVariant
+                            )
                     )
                 }
             }
@@ -219,7 +195,7 @@ private fun InstructionsCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -240,7 +216,7 @@ private fun InstructionsCard(modifier: Modifier = Modifier) {
                 if (!isLastStep) {
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 12.dp),
-                        color = DividerColor,
+                        color = MaterialTheme.colorScheme.outline,
                         thickness = 1.dp
                     )
                 }
@@ -265,47 +241,25 @@ private fun InstructionStepRow(
             modifier = Modifier
                 .size(28.dp)
                 .clip(CircleShape)
-                .background(if (isHighlight) OrangeAccent else NavyBlue),
+                .background(
+                    if (isHighlight) MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.primary
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = stepNumber.toString(),
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold
             )
         }
 
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
-            color = NavyBlue,
-            lineHeight = 20.sp,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-@Composable
-private fun UnderstandButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = NavyBlue,
-            contentColor = Color.White
-        )
-    ) {
-        Text(
-            text = "Rozumiem",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
         )
     }
 }
@@ -323,29 +277,20 @@ private fun FooterSection(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .size(18.dp)
                 .clip(CircleShape)
-                .background(FooterTextColor.copy(alpha = 0.2f)),
+                .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "i",
-                color = FooterTextColor,
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                color = MaterialTheme.colorScheme.tertiary,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold
             )
         }
         Text(
             text = "Po zdobyciu bingo możesz dalej odkrywać pozostałe miejsca na planszy.",
             style = MaterialTheme.typography.bodySmall,
-            color = FooterTextColor,
-            lineHeight = 16.sp
+            color = MaterialTheme.colorScheme.tertiary
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GuideScreenPreview() {
-    BingohoodTheme {
-        GuideScreen()
     }
 }

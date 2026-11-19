@@ -12,9 +12,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = NavyBlue,
+    onPrimary = Color.White,
+    secondary = OrangeAccent,
+    onSecondary = Color.White,
+    tertiary = FooterTextColor,
+    onTertiary = Color.White,
+    background = Color(0xFF0F172A),
+    onBackground = Color.White,
+    surface = Color(0xFF1E293B),
+    onSurface = Color.White,
+    surfaceVariant = GrayCell,
+    onSurfaceVariant = SubtitleColor,
+    outline = DividerColor,
+    outlineVariant = DividerColor,
 )
 
 private val LightColorScheme = lightColorScheme(
