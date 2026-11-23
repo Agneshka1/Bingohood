@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
+import pl.bingohood.app.ui.components.BingohoodButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,47 +28,58 @@ import pl.bingohood.app.place.Place
 var UNKNOWN_PLACE = "?"
 
 @Composable
-fun BoardScreen(boardPhase: BoardPhase, places: List<Place>, timeLeftInSeconds: Int, onNavigateToGuide: () -> Unit, onBoardDiscover: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(16.dp),
-            Arrangement.spacedBy(16.dp)
-        ) {
-            var index = 0
+fun BoardScreen(
+    boardPhase: BoardPhase,
+    places: List<Place>,
+    timeLeftInSeconds: Int,
+    onNavigateToGuide: () -> Unit,
+    onBoardDiscover: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                Arrangement.spacedBy(16.dp)
+            ) {
+                var index = 0
 
-            for (row in 0..2) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    for (i in 1..3) {
-                        val placeName = places.getOrNull(index)?.name ?: UNKNOWN_PLACE
-                        BoardTile(
-                            text = placeName,
-                            modifier = Modifier.weight(1f).aspectRatio(1f)
-                        )
-                        index++
+                for (row in 0..2) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        for (i in 1..3) {
+                            val placeName = places.getOrNull(index)?.name ?: UNKNOWN_PLACE
+                            BoardTile(
+                                text = placeName,
+                                modifier = Modifier.weight(1f).aspectRatio(1f)
+                            )
+                            index++
+                        }
                     }
                 }
-            }
 
-            FilledTonalButton(
-                onClick = onBoardDiscover,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            ) {
-                if (boardPhase == BoardPhase.DISCOVERED) Text(timeLeftInSeconds.toString()) else Text("Odkryj planszę")
-            }
+                FilledTonalButton(
+                    onClick = onBoardDiscover,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                ) {
+                    if (boardPhase == BoardPhase.DISCOVERED) Text(timeLeftInSeconds.toString()) else Text("Odkryj planszę")
+                }
 
-            Button(
-                onClick = onNavigateToGuide,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Zasady bingo")
+                BingohoodButton(
+                    text = "Zasady bingo",
+                    onClick = onNavigateToGuide,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
