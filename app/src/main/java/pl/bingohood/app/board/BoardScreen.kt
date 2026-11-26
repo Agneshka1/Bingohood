@@ -1,5 +1,7 @@
 package pl.bingohood.app.board
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,8 +27,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -90,10 +94,10 @@ fun BoardScreen(
                             val currentIndex = index
                             val placeName = places.getOrNull(currentIndex)?.name ?: UNKNOWN_PLACE
 
-                            val tileText = if (boardPhase == BoardPhase.DISCOVERED) placeName else UNKNOWN_PLACE
-
                             BoardTile(
-                                text = tileText,
+                                placeName = placeName,
+                                boardPhase = boardPhase,
+                                index = currentIndex,
                                 isVisited = currentIndex in visitedIndices,
                                 isBingoLine = currentIndex in bingoLineIndices,
                                 enabled = boardPhase == BoardPhase.DISCOVERED,
@@ -114,11 +118,35 @@ fun BoardScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                BingohoodButton(
-                    text = if (boardPhase == BoardPhase.DISCOVERED) timeLeftInSeconds.toString() else "Odkryj planszę",
-                    onClick = onBoardDiscover,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                if (boardPhase == BoardPhase.DISCOVERED) {
+                    OutlinedButton(
+                        onClick = onBoardDiscover,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                        colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            contentColor = MaterialTheme.colorScheme.onSurface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface
+                        ),
+                        enabled = false
+                    ) {
+                        Text(
+                            text = timeLeftInSeconds.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                } else {
+                    BingohoodButton(
+                        text = "Odkryj planszę",
+                        onClick = onBoardDiscover,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 OutlinedButton(
                     onClick = onNavigateToGuide,
@@ -204,13 +232,30 @@ fun BingoProgressTracker(maxInLine: Int) {
 
 @Composable
 fun BoardTile(
-    text: String,
+    placeName: String,
+    boardPhase: BoardPhase,
+    index: Int,
     isVisited: Boolean,
     isBingoLine: Boolean,
     enabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Animacja obrotu Y od 0 do 180 z kaskadowym opóźnieniem
+    val targetRotation = if (boardPhase == BoardPhase.DISCOVERED) 180f else 0f
+    val rotation by animateFloatAsState(
+        targetValue = targetRotation,
+        animationSpec = tween(
+            durationMillis = 400,
+            delayMillis = index * 50
+        ),
+        label = "flipAnimation"
+    )
+
+    // Jeśli obrót przekroczył 90 stopni, kafelek jest "odkryty"
+    val isFlipped = rotation > 90f
+    val currentText = if (isFlipped) placeName else UNKNOWN_PLACE
+
     val bgColor = when {
         isBingoLine -> MaterialTheme.colorScheme.secondaryContainer
         isVisited -> MaterialTheme.colorScheme.tertiaryContainer
@@ -228,7 +273,12 @@ fun BoardTile(
     }
 
     Card(
-        modifier = modifier.clickable(enabled = enabled, onClick = onClick),
+        modifier = modifier
+            .clickable(enabled = enabled, onClick = onClick)
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 12f * density
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = bgColor),
         border = BorderStroke(1.dp, borderColor),
@@ -237,13 +287,19 @@ fun BoardTile(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp),
+                .padding(8.dp)
+                .graphicsLayer {
+                    // Jeśli kafelek jest odwrócony, obracamy zawartość z powrotem, aby nie była lustrzanym odbiciem
+                    if (isFlipped) {
+                        rotationY = 180f
+                    }
+                },
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = text,
-                fontSize = if (text == UNKNOWN_PLACE) 24.sp else 14.sp,
-                fontWeight = if (text == UNKNOWN_PLACE) FontWeight.Bold else FontWeight.Medium,
+                text = currentText,
+                fontSize = if (currentText == UNKNOWN_PLACE) 24.sp else 14.sp,
+                fontWeight = if (currentText == UNKNOWN_PLACE) FontWeight.Bold else FontWeight.Medium,
                 color = textColor,
                 textAlign = TextAlign.Center,
                 maxLines = 3,
