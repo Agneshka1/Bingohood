@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -119,27 +120,7 @@ fun BoardScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 if (boardPhase == BoardPhase.DISCOVERED) {
-                    OutlinedButton(
-                        onClick = onBoardDiscover,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                        colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.onSurface,
-                            disabledContainerColor = MaterialTheme.colorScheme.surface,
-                            disabledContentColor = MaterialTheme.colorScheme.onSurface
-                        ),
-                        enabled = false
-                    ) {
-                        Text(
-                            text = timeLeftInSeconds.toString(),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+                    BoardTimerCard(timeLeftInSeconds = timeLeftInSeconds)
                 } else {
                     BingohoodButton(
                         text = "Odkryj planszę",
@@ -227,6 +208,93 @@ fun BingoProgressTracker(maxInLine: Int) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BoardTimerCard(
+    timeLeftInSeconds: Int,
+    modifier: Modifier = Modifier
+) {
+    val hours = timeLeftInSeconds / 3600
+    val minutes = (timeLeftInSeconds % 3600) / 60
+    val seconds = timeLeftInSeconds % 60
+
+    val formattedHours = hours.toString().padStart(2, '0')
+    val formattedMinutes = minutes.toString().padStart(2, '0')
+    val formattedSeconds = seconds.toString().padStart(2, '0')
+
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Lewa strona - Ikona i teksty
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_schedule_24),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(28.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        text = "Nowa plansza",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "pojawi się za",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                    )
+                }
+            }
+
+            // Prawa strona - Zegar cyfrowy
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                TimerDigitBox(text = formattedHours, textColor = MaterialTheme.colorScheme.onPrimary)
+                Text(":", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+                TimerDigitBox(text = formattedMinutes, textColor = MaterialTheme.colorScheme.onPrimary)
+                Text(":", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+                TimerDigitBox(text = formattedSeconds, textColor = MaterialTheme.colorScheme.secondary)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TimerDigitBox(text: String, textColor: androidx.compose.ui.graphics.Color) {
+    Box(
+        modifier = Modifier
+            .height(48.dp)
+            .width(44.dp)
+            .background(
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.12f),
+                shape = RoundedCornerShape(12.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium
+        )
     }
 }
 
