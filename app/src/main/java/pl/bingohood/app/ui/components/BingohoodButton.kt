@@ -8,6 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pl.bingohood.app.ui.theme.BingohoodTheme
@@ -16,7 +22,9 @@ import pl.bingohood.app.ui.theme.BingohoodTheme
 fun BingohoodButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    iconRes: Int? = null,
+    iconTint: Color? = null
 ) {
     Button(
         onClick = onClick,
@@ -27,6 +35,15 @@ fun BingohoodButton(
             contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
+        if (iconRes != null) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                tint = iconTint ?: MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,

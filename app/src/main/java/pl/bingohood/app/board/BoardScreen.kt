@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,13 +72,73 @@ fun BoardScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (boardPhase == BoardPhase.DISCOVERED) {
-                BingoProgressTracker(maxInLine = maxInLine)
+            if (boardPhase == BoardPhase.UNDISCOVERED) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.secondaryContainer
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_auto_awesome_24),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = "Nowa plansza gotowa",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    }
+                    Text(
+                        text = "Kliknij by odkryć planszę na dziś",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "gówno 1234, zrob zdjecie atrakcji lub kutasa",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             } else {
-                Spacer(modifier = Modifier.height(72.dp))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Zrob sweet focie gołego neptuna",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        BingoProgressTracker(maxInLine = maxInLine)
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             var index = 0
             Column(
@@ -125,7 +184,9 @@ fun BoardScreen(
                     BingohoodButton(
                         text = "Odkryj planszę",
                         onClick = onBoardDiscover,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        iconRes = R.drawable.star_border,
+                        iconTint = MaterialTheme.colorScheme.secondary
                     )
                 }
 
@@ -137,6 +198,13 @@ fun BoardScreen(
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_info_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Zasady gry",
                         style = MaterialTheme.typography.titleMedium,
@@ -152,28 +220,41 @@ fun BoardScreen(
 @Composable
 fun BingoProgressTracker(maxInLine: Int) {
     if (maxInLine >= 3) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondaryContainer, shape = CircleShape)
-                .border(1.dp, MaterialTheme.colorScheme.secondary, shape = CircleShape)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.secondary)
         ) {
-            Icon(
-                painter = painterResource(R.drawable.achievements),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(24.dp)
-            )
-            Text("Masz BINGO!", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Icon(
-                painter = painterResource(R.drawable.ic_star),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(24.dp)
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(R.drawable.achievements),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Masz BINGO!",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Icon(
+                    painter = painterResource(R.drawable.baseline_auto_awesome_24),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     } else {
         val text = when (maxInLine) {
@@ -335,8 +416,7 @@ fun BoardTile(
         else -> MaterialTheme.colorScheme.outlineVariant
     }
     val textColor = when {
-        isBingoLine -> MaterialTheme.colorScheme.onSecondaryContainer
-        isVisited -> MaterialTheme.colorScheme.onTertiaryContainer
+        isBingoLine || isVisited -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
@@ -367,7 +447,7 @@ fun BoardTile(
             Text(
                 text = currentText,
                 fontSize = if (currentText == UNKNOWN_PLACE) 24.sp else 14.sp,
-                fontWeight = if (currentText == UNKNOWN_PLACE) FontWeight.Bold else FontWeight.Medium,
+                fontWeight = if (isBingoLine || isVisited) FontWeight.SemiBold else if (currentText == UNKNOWN_PLACE) FontWeight.Bold else FontWeight.Medium,
                 color = textColor,
                 textAlign = TextAlign.Center,
                 maxLines = 3,
