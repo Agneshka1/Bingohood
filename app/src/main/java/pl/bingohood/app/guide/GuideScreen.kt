@@ -277,12 +277,12 @@ private fun FooterSection(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .size(18.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)),
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "i",
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold
             )
@@ -290,7 +290,7 @@ private fun FooterSection(modifier: Modifier = Modifier) {
         Text(
             text = "Po zdobyciu bingo możesz dalej odkrywać pozostałe miejsca na planszy.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

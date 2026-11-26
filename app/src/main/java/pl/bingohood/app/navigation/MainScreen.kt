@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pl.bingohood.app.achievements.AchievementsScreen
 import pl.bingohood.app.board.BoardScreen
+import pl.bingohood.app.board.BoardViewModel
 import pl.bingohood.app.guide.GuideScreen
 import pl.bingohood.app.stats.StatsScreen
 import pl.bingohood.app.ui.components.BingohoodBottomBar
@@ -26,7 +31,13 @@ fun MainScreen() {
             BingohoodBottomBar(
                 currentDestination = currentDestination,
                 onNavigate = { route ->
-                    navController.navigate(route)
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }
@@ -37,9 +48,22 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<BoardRoute> {
+                val viewModel: BoardViewModel = viewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                
                 BoardScreen(
+                    boardPhase = uiState.boardPhase,
+                    places = uiState.places,
+                    timeLeftInSeconds = uiState.timeLeftInSeconds,
+                    visitedIndices = uiState.visitedIndices,
+                    maxInLine = uiState.maxInLine,
+                    bingoLineIndices = uiState.bingoLineIndices,
+                    onTileClick = { viewModel.toggleTileVisited(it) },
                     onNavigateToGuide = {
                         navController.navigate(GuideRoute)
+                    },
+                    onBoardDiscover = {
+                        viewModel.discoverBoard()
                     }
                 )
             }
@@ -49,9 +73,7 @@ fun MainScreen() {
 
             composable<GuideRoute> {
                 GuideScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }
