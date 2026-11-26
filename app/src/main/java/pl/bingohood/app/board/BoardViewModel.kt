@@ -14,8 +14,33 @@ import kotlin.time.Duration.Companion.seconds
 data class BoardUiState(
     val boardPhase: BoardPhase = BoardPhase.UNDISCOVERED,
     val places: List<Place> = emptyList(),
-    val timeLeftInSeconds: Int = 60 // only for testing
-)
+    val timeLeftInSeconds: Int = 60, // only for testing
+    val visitedIndices: Set<Int> = emptySet()
+) {
+    // Zwraca maksymalną ilość trafień w ramach jednej, 3-elementowej linii
+    val maxInLine: Int
+        get() {
+            val lines = listOf(
+                listOf(0, 1, 2), listOf(3, 4, 5), listOf(6, 7, 8),
+                listOf(0, 3, 6), listOf(1, 4, 7), listOf(2, 5, 8),
+                listOf(0, 4, 8), listOf(2, 4, 6)
+            )
+            return lines.maxOfOrNull { line -> line.count { it in visitedIndices } } ?: 0
+        }
+
+    // Zwraca indeksy tych kafelków, które utworzyły pełne, 3-elementowe linie
+    val bingoLineIndices: Set<Int>
+        get() {
+            val lines = listOf(
+                listOf(0, 1, 2), listOf(3, 4, 5), listOf(6, 7, 8),
+                listOf(0, 3, 6), listOf(1, 4, 7), listOf(2, 5, 8),
+                listOf(0, 4, 8), listOf(2, 4, 6)
+            )
+            return lines.filter { line -> line.count { it in visitedIndices } == 3 }
+                .flatten()
+                .toSet()
+        }
+}
 
 class BoardViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(BoardUiState())
@@ -50,6 +75,20 @@ class BoardViewModel : ViewModel() {
             )
         }
         startTimer()
+    }
+
+
+    fun toggleTileVisited(index: Int) {
+        _uiState.update { currentState ->
+            if (currentState.boardPhase != BoardPhase.DISCOVERED) return@update currentState
+
+            val newVisited = if (index in currentState.visitedIndices) {
+                currentState.visitedIndices - index
+            } else {
+                currentState.visitedIndices + index
+            }
+            currentState.copy(visitedIndices = newVisited)
+        }
     }
 
     private fun generateTestPlaces() : List<Place> {

@@ -50,11 +50,15 @@ fun MainScreen() {
             composable<BoardRoute> {
                 val viewModel: BoardViewModel = viewModel()
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                val boardPhase = uiState.boardPhase
-                val places = uiState.places
-                val secondsLeft = uiState.timeLeftInSeconds
-
-                BoardScreen(boardPhase, places, secondsLeft,
+                
+                BoardScreen(
+                    boardPhase = uiState.boardPhase,
+                    places = uiState.places,
+                    timeLeftInSeconds = uiState.timeLeftInSeconds,
+                    visitedIndices = uiState.visitedIndices,
+                    maxInLine = uiState.maxInLine,
+                    bingoLineIndices = uiState.bingoLineIndices,
+                    onTileClick = { viewModel.toggleTileVisited(it) },
                     onNavigateToGuide = {
                         navController.navigate(GuideRoute)
                     },
@@ -69,9 +73,7 @@ fun MainScreen() {
 
             composable<GuideRoute> {
                 GuideScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }

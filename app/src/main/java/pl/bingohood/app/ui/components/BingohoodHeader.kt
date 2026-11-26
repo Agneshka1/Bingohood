@@ -16,10 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.bingohood.app.R
-import pl.bingohood.app.ui.theme.BingohoodTheme
 
 @Composable
 fun BingohoodHeader(
@@ -65,13 +63,3 @@ fun BingohoodHeader(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun BingohoodHeaderPreview() {
-    BingohoodTheme {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            BingohoodHeader()
-            BingohoodHeader(subtitle = "Twoje postępy")
-        }
-    }
-}

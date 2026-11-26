@@ -1,31 +1,44 @@
 package pl.bingohood.app.board
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import pl.bingohood.app.ui.components.BingohoodButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pl.bingohood.app.R
 import pl.bingohood.app.place.Place
+import pl.bingohood.app.ui.components.BingohoodButton
+import pl.bingohood.app.ui.components.BingohoodHeader
 
-var UNKNOWN_PLACE = "?"
+const val UNKNOWN_PLACE = "?"
 
 @Composable
 fun BoardScreen(
@@ -34,52 +47,156 @@ fun BoardScreen(
     timeLeftInSeconds: Int,
     onNavigateToGuide: () -> Unit,
     onBoardDiscover: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    visitedIndices: Set<Int> = emptySet(),
+    maxInLine: Int = 0,
+    bingoLineIndices: Set<Int> = emptySet(),
+    onTileClick: (Int) -> Unit = {}
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                Arrangement.spacedBy(16.dp)
-            ) {
-                var index = 0
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            BingohoodHeader(subtitle = "Zdobądź bingo!")
 
-                for (row in 0..2) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            if (boardPhase == BoardPhase.DISCOVERED) {
+                BingoProgressTracker(maxInLine = maxInLine)
+            } else {
+                Spacer(modifier = Modifier.height(72.dp))
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            var index = 0
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                repeat(3) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        for (i in 1..3) {
-                            val placeName = places.getOrNull(index)?.name ?: UNKNOWN_PLACE
+                        repeat(3) {
+                            val currentIndex = index
+                            val placeName = places.getOrNull(currentIndex)?.name ?: UNKNOWN_PLACE
+
+                            val tileText = if (boardPhase == BoardPhase.DISCOVERED) placeName else UNKNOWN_PLACE
+
                             BoardTile(
-                                text = placeName,
-                                modifier = Modifier.weight(1f).aspectRatio(1f)
+                                text = tileText,
+                                isVisited = currentIndex in visitedIndices,
+                                isBingoLine = currentIndex in bingoLineIndices,
+                                enabled = boardPhase == BoardPhase.DISCOVERED,
+                                onClick = { onTileClick(currentIndex) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f)
                             )
                             index++
                         }
                     }
                 }
+            }
 
-                FilledTonalButton(
-                    onClick = onBoardDiscover,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                ) {
-                    if (boardPhase == BoardPhase.DISCOVERED) Text(timeLeftInSeconds.toString()) else Text("Odkryj planszę")
-                }
+            Spacer(modifier = Modifier.weight(1f))
 
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 BingohoodButton(
-                    text = "Zasady bingo",
-                    onClick = onNavigateToGuide,
+                    text = if (boardPhase == BoardPhase.DISCOVERED) timeLeftInSeconds.toString() else "Odkryj planszę",
+                    onClick = onBoardDiscover,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                OutlinedButton(
+                    onClick = onNavigateToGuide,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                ) {
+                    Text(
+                        text = "Zasady gry",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BingoProgressTracker(maxInLine: Int) {
+    if (maxInLine >= 3) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondaryContainer, shape = CircleShape)
+                .border(1.dp, MaterialTheme.colorScheme.secondary, shape = CircleShape)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.achievements),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(24.dp)
+            )
+            Text("Masz BINGO!", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Icon(
+                painter = painterResource(R.drawable.ic_star),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    } else {
+        val text = when (maxInLine) {
+            1 -> "Jeszcze 2 miejsca do BINGO"
+            2 -> "Już tylko 1 miejsce do BINGO!"
+            else -> "3 miejsca do BINGO"
+        }
+        val textColor = if (maxInLine == 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text, color = textColor, fontWeight = FontWeight.Medium)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (i in 0 until 3) {
+                    val color = when {
+                        i < maxInLine -> if (maxInLine == 1) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.secondary
+                        else -> MaterialTheme.colorScheme.surfaceVariant
+                    }
+                    Box(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .weight(1f)
+                            .background(color, CircleShape)
+                    )
+                }
             }
         }
     }
@@ -88,21 +205,46 @@ fun BoardScreen(
 @Composable
 fun BoardTile(
     text: String,
-    modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.labelLarge
+    isVisited: Boolean,
+    isBingoLine: Boolean,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
+    val bgColor = when {
+        isBingoLine -> MaterialTheme.colorScheme.secondaryContainer
+        isVisited -> MaterialTheme.colorScheme.tertiaryContainer
+        else -> MaterialTheme.colorScheme.surface
+    }
+    val borderColor = when {
+        isBingoLine -> MaterialTheme.colorScheme.secondary
+        isVisited -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.outlineVariant
+    }
+    val textColor = when {
+        isBingoLine -> MaterialTheme.colorScheme.onSecondaryContainer
+        isVisited -> MaterialTheme.colorScheme.onTertiaryContainer
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+
+    Card(
+        modifier = modifier.clickable(enabled = enabled, onClick = onClick),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = bgColor),
+        border = BorderStroke(1.dp, borderColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .size(90.dp)
                 .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = text,
-                fontSize = if (text == UNKNOWN_PLACE) 20.sp else 15.sp,
-                style = textStyle,
+                fontSize = if (text == UNKNOWN_PLACE) 24.sp else 14.sp,
+                fontWeight = if (text == UNKNOWN_PLACE) FontWeight.Bold else FontWeight.Medium,
+                color = textColor,
                 textAlign = TextAlign.Center,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
